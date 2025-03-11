@@ -55,7 +55,7 @@ export default function Analizador() {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-2xl text-gray-800 text-center mb-4">
+      <h1 className="text-2xl text-purple-800 text-center mb-4">
         Analizador de Curriculums
       </h1>
       <form onSubmit={handleSubmit}>
