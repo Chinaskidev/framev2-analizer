@@ -8,7 +8,7 @@ export default function Analizador() {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
 
   useEffect(() => {
     const load = async () => {
