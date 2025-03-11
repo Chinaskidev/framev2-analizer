@@ -8,10 +8,17 @@ export default function Analizador() {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Notifica a Farcaster que el frame está listo
+  const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+
   useEffect(() => {
-    sdk.actions.ready();
-  }, []);
+    const load = async () => {
+      sdk.actions.ready();
+    };
+    if (sdk && !isSDKLoaded) {
+      setIsSDKLoaded(true);
+      load();
+    }
+  }, [isSDKLoaded]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
