@@ -1,24 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
 import sdk from "@farcaster/frame-sdk";
+import Image from "next/image"; // Para optimizar la carga de imágenes en Next.js
 
 export default function Analizador() {
+  const [showForm, setShowForm] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [jobType, setJobType] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-
+  // Notifica a Farcaster que el frame está listo
   useEffect(() => {
-    const load = async () => {
-      sdk.actions.ready();
-    };
-    if (sdk && !isSDKLoaded) {
-      setIsSDKLoaded(true);
-      load();
-    }
-  }, [isSDKLoaded]);
+    sdk.actions.ready();
+  }, []);
+
+  // Cambia la vista al formulario
+  const handleStart = () => {
+    setShowForm(true);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -52,6 +52,23 @@ export default function Analizador() {
     }
     setLoading(false);
   };
+
+  if (!showForm) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+        <div className="mb-8">
+          {/* Asegurate de tener tu imagen en la carpeta public, por ejemplo public/logo.jpg */}
+          <Image src="/skinner-logo5.png" alt="Logo" width={200} height={200} />
+        </div>
+        <button
+          onClick={handleStart}
+          className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded"
+        >
+          Empezar
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 max-w-xl mx-auto">
