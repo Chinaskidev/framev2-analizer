@@ -1,4 +1,6 @@
-{
+export async function GET() {
+ 
+  const config = {
   "accountAssociation": {
     "header": "eyJmaWQiOjM4NjI1MiwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEJDNjQ0MmZCMTc3MzBlZDJCQ2Q1NmNENzQyOWU4MkYyQTE5ZTc4YzYifQ",
     "payload": "eyJkb21haW4iOiJmcmFtZXYyLWFuYWxpemVyLnZlcmNlbC5hcHAifQ",
@@ -14,5 +16,7 @@
     "splashImageUrl": "https://framev2-analizer.vercel.app/splash.png",
     "splashBackgroundColor": "#eeccff",
     "webhookUrl": "https://framev2-analizer.vercel.app/api/webhook"
-  }
+  },
+};
+    return Response.json(config);
 }

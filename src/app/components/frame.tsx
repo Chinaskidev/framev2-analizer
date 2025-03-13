@@ -1,7 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import sdk from "@farcaster/frame-sdk";
-import Image from "next/image"; // Para optimizar la carga de imágenes en Next.js
+import Image from "next/image";
+
+// Definición del tipo para el resultado de addFrame, basado en la documentación
+type AddFrameResult = 
+  | { added: true; notificationDetails?: { url: string; token: string } }
+  | { added: false; reason: "invalid_domain_manifest" | "rejected_by_user" };
 
 export default function Analizador() {
   const [showForm, setShowForm] = useState(false);
@@ -10,9 +15,18 @@ export default function Analizador() {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Notifica a Farcaster que el frame está listo
+  // Notifica a Farcaster que el frame está listo y solicita agregar el frame
   useEffect(() => {
     sdk.actions.ready();
+    sdk.actions.addFrame().then((result) => {
+      // Forzamos el tipo para que TypeScript reconozca las propiedades
+      const res = result as AddFrameResult;
+      if (res.added) {
+        console.log("Frame agregado", res.notificationDetails);
+      } else {
+        console.log("Frame no agregado:", res.reason);
+      }
+    });
   }, []);
 
   // Cambia la vista al formulario
@@ -57,7 +71,7 @@ export default function Analizador() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
         <div className="mb-8">
-          {/* Asegurate de tener tu imagen en la carpeta public, por ejemplo public/logo.jpg */}
+          {/* Asegurate de tener la imagen en la carpeta public, por ejemplo public/skinner-logo5.png */}
           <Image src="/skinner-logo5.png" alt="Logo" width={200} height={200} />
         </div>
         <button
