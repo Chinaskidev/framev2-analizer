@@ -29,6 +29,14 @@ export default function Analizador() {
     });
   }, []);
 
+  // Función para volver a la landing page (oculta el formulario)
+  const handleBack = () => {
+    setShowForm(false);
+    setFeedback("");
+    setFile(null);
+    setJobType("");
+  };
+
   // Cambia la vista al formulario
   const handleStart = () => {
     setShowForm(true);
@@ -43,7 +51,7 @@ export default function Analizador() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
-      alert("Por favor, selecciona un archivo.");
+      alert("Please select a Cv's.");
       return;
     }
     setLoading(true);
@@ -61,8 +69,8 @@ export default function Analizador() {
       const data = await res.json();
       setFeedback(data.feedback);
     } catch (error) {
-      console.error("Error analizando el CV:", error);
-      setFeedback("Ocurrió un error al analizar el curriculum.");
+      console.error("Error analising the CV:", error);
+      setFeedback("An error occurred while parsing the resume.");
     }
     setLoading(false);
   };
@@ -71,14 +79,14 @@ export default function Analizador() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
         <div className="mb-8">
-          {/* Asegurate de tener la imagen en la carpeta public, por ejemplo public/skinner-logo5.png */}
+          {/* Asegurate de tener tu imagen en la carpeta public, por ejemplo public/skinner-logo5.png */}
           <Image src="/skinner-logo5.png" alt="Logo" width={200} height={200} />
         </div>
         <button
           onClick={handleStart}
           className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded"
         >
-          Empezar
+          Analyse your CV
         </button>
       </div>
     );
@@ -86,13 +94,14 @@ export default function Analizador() {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-2xl text-purple-800 text-center mb-4">
-        Analizador de Curriculums
-      </h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl text-purple-800">CV Analyser</h1>
+        
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-2">
-            Selecciona tu CV (PDF o DOCX):
+            Select your CV (PDF or DOCX):
           </label>
           <input
             type="file"
@@ -103,13 +112,13 @@ export default function Analizador() {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-2">
-            Tipo de trabajo (opcional):
+            Type of work (optional):
           </label>
           <input
             type="text"
             value={jobType}
             onChange={(e) => setJobType(e.target.value)}
-            placeholder="Ej: Desarrollador, Marketing, etc."
+            placeholder="Ej: Developer, Marketing, etc."
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
@@ -118,7 +127,15 @@ export default function Analizador() {
           className="w-full bg-purple-500 hover:bg-purple-600 text-white p-2 rounded"
           disabled={loading}
         >
-          {loading ? "Analizando..." : "Analizar"}
+          {loading ? "Analysing..." : "Analyse"}
+        </button>
+
+        {/* Botón para volver a la landing */}
+        <button
+          onClick={handleBack}
+          className="mt-4 px-4 py-2  bg-purple-500 hover:bg-purple-600 text-white p-2 rounded"
+        >
+          Back
         </button>
       </form>
       {feedback && (
