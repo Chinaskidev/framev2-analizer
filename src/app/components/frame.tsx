@@ -80,7 +80,7 @@ export default function Analizador() {
 
   if (!showForm) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-violet-300">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-violet-100">
         <div className="mb-8">
           <Image src="/skinner-logo5.png" alt="Logo" width={200} height={200} />
         </div>
@@ -96,7 +96,7 @@ export default function Analizador() {
 
   // Pantalla con el formulario para subir el archivo y mostrar el feedback
   return (
-    <div className="p-4 max-w-xl mx-auto bg-violet-300">
+    <div className="p-4 max-w-xl mx-auto">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl text-purple-800">CV Analyser</h1>
       </div>
