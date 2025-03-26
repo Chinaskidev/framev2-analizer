@@ -6,11 +6,11 @@ import { Providers } from "../app/providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://framev2-analizer.vercel.app/'),
-  title: 'Mi Frame - Analizador de Curriculums',
+  title: 'Skinner Frame - Resume Analyzer',
   description: 'Recibe feedback inteligente sobre tu curriculum usando IA.',
   openGraph: {
-    title: 'Mi Frame - Analizador de Curriculums',
-    description: 'Recibe feedback inteligente sobre tu curriculum usando IA.',
+    title: 'Skinner Frame',
+    description: 'Receive intelligent feedback on your CV using AI.',
     images: [
       {
         url: 'https://framev2-analizer.vercel.app/skinner-logo5.png', // imagen desde vercel
