@@ -2,25 +2,25 @@
 import { useState, useEffect } from "react";
 import sdk from "@farcaster/frame-sdk";
 import Image from "next/image";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
 
 // Definición del tipo para el resultado de addFrame, basado en la documentación
-type AddFrameResult = 
+type AddFrameResult =
   | { added: true; notificationDetails?: { url: string; token: string } }
   | { added: false; reason: "invalid_domain_manifest" | "rejected_by_user" };
 
 export default function Analizador() {
+  const [showWarning, setShowWarning] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [jobType, setJobType] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Notifica a Farcaster que el frame está listo y solicita agregar el frame
+  // Inicializa el SDK de Farcaster
   useEffect(() => {
     sdk.actions.ready();
     sdk.actions.addFrame().then((result) => {
-      // Forzamos el tipo para que TypeScript reconozca las propiedades
       const res = result as AddFrameResult;
       if (res.added) {
         console.log("Frame agregado", res.notificationDetails);
@@ -29,6 +29,13 @@ export default function Analizador() {
       }
     });
   }, []);
+
+  // Funciones para manejar la advertencia
+  const handleAccept = () => {
+    setShowWarning(false);
+  };
+
+ 
 
   // Función para volver a la landing page (oculta el formulario)
   const handleBack = () => {
@@ -78,9 +85,30 @@ export default function Analizador() {
     setLoading(false);
   };
 
+  // Renderiza la landing page con la advertencia como card en la parte superior
   if (!showForm) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-violet-100">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-violet-100 relative">
+        {/* Card de advertencia en la parte superior */}
+        {showWarning && (
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white p-6 rounded shadow-lg max-w-md z-50">
+            <button
+              onClick={handleAccept}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            >
+              X
+            </button>
+            <h2 className="text-xl font-bold mb-4 text-red-800">Privacy Notice</h2>
+            <p className="mb-4 text-black">
+            We don’t use your data. This app is simply for you to experience the mini-app, 
+            where Skinner provides feedback and helps you improve your CV.
+            </p>
+            <div className="flex justify-end">
+            </div>
+          </div>
+        )}
+
+        {/* Contenido de la landing page */}
         <div className="mb-8">
           <Image src="/skinner-logo5.png" alt="Logo" width={200} height={200} />
         </div>
@@ -109,15 +137,12 @@ export default function Analizador() {
           </label>
 
           <div className="flex items-center">
-            {/* Etiqueta que actúa como botón para abrir el selector de archivos */}
             <label
               htmlFor="fileInput"
               className="cursor-pointer px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded"
             >
               Choose File
             </label>
-
-            {/* Input real, oculto */}
             <input
               id="fileInput"
               type="file"
@@ -125,8 +150,6 @@ export default function Analizador() {
               onChange={handleFileChange}
               className="hidden"
             />
-
-            {/* Texto que muestra el nombre del archivo seleccionado (o un mensaje si no hay archivo) */}
             <span className="ml-2 text-gray-300">
               {file ? file.name : "No file selected"}
             </span>
@@ -154,7 +177,6 @@ export default function Analizador() {
           {loading ? "Analysing..." : "Analyse"}
         </button>
 
-        {/* Botón para volver a la landing */}
         <button
           onClick={handleBack}
           className="mt-4 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded"
@@ -164,14 +186,13 @@ export default function Analizador() {
       </form>
 
       {feedback && (
-      <div className="mt-4 p-4 border rounded bg-gray-50">
-        <h2 className="font-bold mb-2 text-gray-800">Feedback:</h2>
-        {/* Div envoltorio con la clase */}
-        <div className="text-gray-700">
-          <ReactMarkdown>{feedback}</ReactMarkdown>
+        <div className="mt-4 p-4 border rounded bg-gray-50">
+          <h2 className="font-bold mb-2 text-gray-800">Feedback:</h2>
+          <div className="text-gray-700">
+            <ReactMarkdown>{feedback}</ReactMarkdown>
+          </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   );
 }
